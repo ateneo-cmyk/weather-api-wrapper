@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Clima</title>
+</head>
+<body>
+    <h1>Mi App del Clima</h1>
+    
+   
+    <input type="text" id="cityInput" placeholder="Escribe una ciudad (ej. Madrid)">
+    <button onclick="buscarClima()">Buscar</button>
+
+   
+    <div id="resultado" style="margin-top: 20px;"></div>
+
+    
+    <script>
+        async function buscarClima() {
+            const city = document.getElementById('cityInput').value;
+            const resultadoDiv = document.getElementById('resultado');
+            
+            
+            resultadoDiv.innerHTML = "<p>Buscando...</p>";
+
+            try {
+               
+                const response = await fetch(`/api/weather/${city}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    
+                    resultadoDiv.innerHTML = `
+                        <h2>Clima en ${data.ciudad}</h2>
+                        <p><strong>Temperatura:</strong> ${data.temperatura} °C</p>
+                        <p><strong>Sensación Térmica:</strong> ${data.sensacion_termica} °C</p>
+                        <p><strong>Condición:</strong> ${data.descripcion}</p>
+                    `;
+                } else {
+                   
+                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                resultadoDiv.innerHTML = `<p style="color: red;">Error de conexión con el servidor.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
