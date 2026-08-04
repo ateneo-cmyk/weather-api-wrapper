@@ -1,0 +1,36 @@
+# ⛅ Weather API Wrapper Service
+
+Un servicio backend robusto construido con **Python y Flask** que actúa como intermediario (wrapper) para consultar datos climáticos. El proyecto se conecta a la API externa de OpenWeatherMap e implementa un sistema de almacenamiento en caché con **Redis** para optimizar el rendimiento, reducir la latencia y minimizar las peticiones externas.
+
+Este proyecto forma parte de los desafíos de desarrollo backend de [roadmap.sh](https://roadmap.sh/projects/weather-api-wrapper-service).
+
+## 🚀 Características Principales
+
+*   **Integración de API Externa:** Consume y filtra datos en tiempo real desde OpenWeatherMap.
+*   **Caché Avanzado:** Utiliza Redis para almacenar respuestas temporalmente (TTL) y evitar consultas redundantes a la API externa.
+*   **Manejo de Errores (Error Handling):** Gestión de códigos de estado HTTP para manejar ciudades no encontradas o errores de conexión.
+*   **Frontend Integrado:** Interfaz web intuitiva y limpia usando HTML, CSS y JavaScript Vanilla.
+*   **Seguridad:** Uso de variables de entorno (`.env`) para proteger credenciales y API Keys.
+
+## 🛠️ Tecnologías Utilizadas
+
+*   **Backend:** Python, Flask
+*   **Base de Datos / Caché:** Redis
+*   **Frontend:** HTML5, JavaScript (Fetch API)
+*   **Librerías:** `requests`, `python-dotenv`, `redis`
+
+## ⚙️ Requisitos Previos
+
+Antes de ejecutar este proyecto, asegúrate de tener instalado en tu sistema:
+*   [Python 3.x](https://www.python.org/)
+*   [Redis](https://redis.io/download) (En ejecución)
+*   Una API Key gratuita de [OpenWeatherMap](https://openweathermap.org/)
+
+## 💻 Instalación y Ejecución
+
+Sigue estos pasos para levantar el proyecto en tu entorno local:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
+   cd TU_REPOSITORIO
