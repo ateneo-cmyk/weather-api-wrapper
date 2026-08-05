@@ -3,46 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Clima</title>
+    <title>ClimaApp | Profesional</title>
+  
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Mi App del Clima</h1>
-    
-   
-    <input type="text" id="cityInput" placeholder="Escribe una ciudad (ej. Madrid)">
-    <button onclick="buscarClima()">Buscar</button>
-
-   
-    <div id="resultado" style="margin-top: 20px;"></div>
+<body class="bg-gradient-to-br from-blue-500 to-indigo-800 min-h-screen flex items-center justify-center p-4 font-sans text-gray-800">
 
     
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md transform transition-all">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-2">🌤️ ClimaApp</h1>
+            <p class="text-gray-500 text-sm">Consulta el clima actual en cualquier ciudad</p>
+        </div>
+        
+       
+        <div class="flex flex-col gap-4 mb-6">
+            <input 
+                type="text" 
+                id="cityInput" 
+                placeholder="Ej. Madrid, Tokyo, Buenos Aires..."
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                onkeypress="if(event.key === 'Enter') buscarClima()"
+            >
+            <button 
+                onclick="buscarClima()"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+            >
+                Buscar Clima
+            </button>
+        </div>
+
+        
+        <div id="resultado" class="mt-4 hidden opacity-0 transition-opacity duration-500">
+            
+        </div>
+
+    </div>
+
+   
     <script>
         async function buscarClima() {
             const city = document.getElementById('cityInput').value;
             const resultadoDiv = document.getElementById('resultado');
             
+            if (!city.trim()) return; // Evita buscar si el campo está vacío
+
             
-            resultadoDiv.innerHTML = "<p>Buscando...</p>";
+            resultadoDiv.classList.remove('hidden', 'opacity-0');
+            resultadoDiv.classList.add('opacity-100');
+            resultadoDiv.innerHTML = `
+                <div class="flex justify-center items-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                </div>
+            `;
 
             try {
-               
                 const response = await fetch(`/api/weather/${city}`);
                 const data = await response.json();
 
                 if (response.ok) {
-                    
+                   
                     resultadoDiv.innerHTML = `
-                        <h2>Clima en ${data.ciudad}</h2>
-                        <p><strong>Temperatura:</strong> ${data.temperatura} °C</p>
-                        <p><strong>Sensación Térmica:</strong> ${data.sensacion_termica} °C</p>
-                        <p><strong>Condición:</strong> ${data.descripcion}</p>
+                        <div class="bg-blue-50 rounded-xl p-6 border border-blue-100 mt-4">
+                            <h2 class="text-2xl font-bold text-blue-900 mb-4 capitalize text-center">${data.ciudad}</h2>
+                            
+                            <div class="grid grid-cols-2 gap-4 text-center mb-4">
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Temperatura</p>
+                                    <p class="text-2xl font-bold text-gray-800">${Math.round(data.temperatura)}°C</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Sensación</p>
+                                    <p class="text-2xl font-bold text-gray-800">${Math.round(data.sensacion_termica)}°C</p>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center bg-white p-3 rounded-lg shadow-sm">
+                                <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Condición</p>
+                                <p class="text-lg font-semibold text-blue-800 capitalize">${data.descripcion}</p>
+                            </div>
+                        </div>
                     `;
                 } else {
                    
-                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                    resultadoDiv.innerHTML = `
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mt-4 rounded-r-lg">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <span class="text-red-500">⚠️</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-red-700 font-medium">Error: ${data.error}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }
             } catch (error) {
-                resultadoDiv.innerHTML = `<p style="color: red;">Error de conexión con el servidor.</p>`;
+                resultadoDiv.innerHTML = `
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mt-4 rounded-r-lg">
+                        <p class="text-sm text-red-700 font-medium">Error de conexión con el servidor.</p>
+                    </div>
+                `;
             }
         }
     </script>
